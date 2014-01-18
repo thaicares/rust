@@ -169,12 +169,10 @@ mod tests {
 
     fn malloc(n: uint) -> CVec<u8> {
         unsafe {
-            let mem = libc::malloc(n as size_t);
-
-            assert!(mem as int != 0);
+            let mem = malloc_raw(n);
 
             CVec::new_with_dtor(mem as *mut u8, n,
-                proc() { libc::free(mem); })
+                proc() { libc::free(mem as *c_void); })
         }
     }
 
